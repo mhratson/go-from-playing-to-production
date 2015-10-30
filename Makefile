@@ -1,9 +1,14 @@
 # Makefile
+#
+build:
+	gb build
+
 test:
-	go test
+	gb test
 
 re-test:
-	reflex -r '\.go' $(MAKE) test
+	reflex -r src/ $(MAKE) test
 
 dev-deps:
 	go get github.com/cespare/reflex
+	go get github.com/constabulary/gb...
