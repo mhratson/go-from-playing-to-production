@@ -4,19 +4,22 @@ import (
 	"fmt"
 	"helloworld"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	http.HandleFunc("/", index)
+	router := httprouter.New()
+	router.GET("/", index)
+	router.GET("/:name", index)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", router)
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("name")
+func index(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	name := ps.ByName("name")
 	if name == "" {
 		name = "Unknown"
 	}
-
-	fmt.Fprintln(w, helloworld.Hello(name))
+	fmt.Fprint(w, helloworld.Hello(name))
 }
